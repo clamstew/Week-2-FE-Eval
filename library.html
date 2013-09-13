@@ -16,11 +16,24 @@
     #library .book h5 {
       font-weight: normal;
     }
+    #add-book {background: lightblue; padding: 10px;}
+    #add-book input[type=text] {
+        border: 1px solid #000; padding: 3px;
+    }
   </style>
 </head>
 <body>
 
 <h1>THE LIBRARY</h1>
+
+<div id="add-book">
+    <h3>Add a new book:</h3>
+    <form id="add-book-form">
+        <input id="title" type="text" placeholder="Title ..." /><br />
+        <input id="author" type="text" placeholder="Author ..." /><br />
+        <input type="submit" value="Add Book" />
+    </form>
+</div>
 
 <div id="library"></div>
 
@@ -57,9 +70,11 @@
   ];
 
   var renderLibrary = function(books) {
+      $('#library').html('');
       var bookTemplateHtml = $('#templates .book').html();
       var scoreTemplate = _.template(bookTemplateHtml);
       var newBookHtml;
+
       for (var i = 0; i < books.length; i++) {
           newBookHtml = scoreTemplate(books[i]);
           $('#library').append(newBookHtml);
@@ -67,6 +82,20 @@
   }
 
   renderLibrary(books);
+
+  $('#add-book-form').submit(function(event) {
+    event.preventDefault();
+    var newBookTitle = $('#add-book-form #title').val();
+    var newBookAuthor = $('#add-book-form #author').val();
+    var newBookHash = {
+        title: newBookTitle, 
+        author: newBookAuthor, 
+        status: 'available'
+    };
+    books.push(newBookHash);
+    renderLibrary(books);
+    $('#add-book-form')[0].reset();
+  });
   
 
 </script>
