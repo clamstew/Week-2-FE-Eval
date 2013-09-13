@@ -27,9 +27,9 @@
 <div id="templates">
   <script class="book" type="text/template">
     <div class="book">
-      <h3><%= book.title %></h3>
-      <h5><%= book.author %></h3>
-      <p>Status: <%= book.status %></p>
+      <h3><%= title %></h3>
+      <h5><%= author %></h3>
+      <p>Status: <%= status %></p>
     </div>
   </script>
 </div>
@@ -38,20 +38,36 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script type="text/javascript">
   // TODO
-  var book = {
-    title: 'Moby Dick',
-    author: 'Herman Melville',
-    status: 'available'
-  };
+  var books = [
+    {
+      title: 'Moby Dick',
+      author: 'Herman Melville',
+      status: 'available'
+    },
+    {
+      title: 'The Republic',
+      author: 'Plato',
+      status: 'available'
+    },
+    {
+      title: 'Metaphysics',
+      author: 'Aristotle',
+      status: 'available'
+    }
+  ];
 
   var bookTemplateHtml = $('#templates .book').html();
   var scoreTemplate = _.template(bookTemplateHtml);
-  newBookHtml = scoreTemplate(book);
-  $('#library').append(newBookHtml);
+  var newBookHtml;
+  for (var i = 0; i < books.length; i++) {
+      newBookHtml = scoreTemplate(books[i]);
+      $('#library').append(newBookHtml);
+  }
+  
 
 </script>
 
-<small>It's back.</small>
+<small>It's back and better than ever.</small>
 
 </body>
 </html>
