@@ -50,7 +50,6 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script type="text/javascript">
-  // TODO
   var books = [
     {
       title: 'Moby Dick',
@@ -81,8 +80,6 @@
       }
   }
 
-  renderLibrary(books);
-
   $('#add-book-form').submit(function(event) {
     event.preventDefault();
     var newBookTitle = $('#add-book-form #title').val();
@@ -97,6 +94,7 @@
     $('#add-book-form')[0].reset();
   });
   
+  renderLibrary(books);
 
 </script>
 
