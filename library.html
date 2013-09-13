@@ -10,6 +10,14 @@
       float: left;
       padding: 1px 20px;
     }
+    #library .book.available { 
+      color: #ffffff;
+      background: #008000;
+    }
+    #library .book.checked-out { 
+      color: #ffffff;
+      background: #A52A2A;
+    }
     #library .book h3 {
       font-style: italic;
     }
@@ -39,14 +47,18 @@
 
 <div id="templates">
   <script class="book" type="text/template">
-    <div class="book">
+    <% if(status === 'available') { %>
+    <div class="book available">
+    <% } else if(status === 'checkedOut') { %>
+    <div class="book checked-out">
+    <% } %>
       <h3><%= title %></h3>
       <h5><%= author %></h3>
       <p>Status: <%= status %></p>
       <% if(status === 'available') { %>
           <input class="checkout-book" data-title="<%= title %>" type="button" value="Check Out"/>
       <% } else if(status === 'checkedOut') { %>
-          <input class="checkout-book" data-title="<%= title %>" type="button" disabled="disabled" value="Not available"/>
+          <input class="return-book" data-title="<%= title %>" type="button" value="Return Book"/>
       <% } %>
     </div>
   </script>
@@ -80,7 +92,7 @@
             $('#library').append(newBookHtml);
         }
         console.log(this);
-        checkoutBookButtion(this); // reinitialize this click function after a new load
+        checkoutReturnBookButtion(this); // reinitialize this click function after a new load
     },
     this.checkoutBook = function(bookTitle) {
       for (var i = 0; i <= this.books.length; i++) {
@@ -112,10 +124,10 @@
     lib.books.push(newBookHash);
     lib.render();
     $('#add-book-form')[0].reset();
-    checkoutBookButtion(lib); // reinitialize this click function after a new load
+    checkoutReturnBookButtion(lib); // reinitialize this click function after a new load
   });
 
-  var checkoutBookButtion = function() {
+  var checkoutReturnBookButtion = function() {
     $('.checkout-book').unbind('click');
     $('.checkout-book').bind('click', function(event) {
       event.preventDefault();
@@ -123,6 +135,16 @@
 
       var thisbook = lib.getBook(thisBookTitle);
       thisbook.status = "checkedOut";
+      lib.render();
+    });
+
+    $('.return-book').unbind('click');
+    $('.return-book').bind('click', function(event) {
+      event.preventDefault();
+      var thisBookTitle = $(this).data('title');
+
+      var thisbook = lib.getBook(thisBookTitle);
+      thisbook.status = "available";
       lib.render();
     });
   }
@@ -156,9 +178,9 @@
   // This should render all the library's books to the web page
   lib.render();
 
-  lib.checkoutBook('Moby Dick');
+  // lib.checkoutBook('Moby Dick');
 
-  lib.render();
+  // lib.render();
 
   // =========== END PROCEDUREAL TEST CODE ===========
 
