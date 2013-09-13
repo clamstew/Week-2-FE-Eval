@@ -63,7 +63,7 @@
              return this.books[i];
           }
       }
-    }
+    },
     this.render = function() {
         $('#library').html('');
         var bookTemplateHtml = $('#templates .book').html();
@@ -74,30 +74,22 @@
             newBookHtml = scoreTemplate(this.books[i]);
             $('#library').append(newBookHtml);
         }
+    },
+    this.checkoutBook = function(bookTitle) {
+      for (var i = 0; i <= this.books.length; i++) {
+          if (this.books[i].title === bookTitle) {
+             if (this.books[i].status === 'available') {
+                this.books[i].status = 'checkedOut';
+                alert("You have checked out: '" + this.books[i].title + "'. Enjoy!" );
+                return this.books[i];
+             } else {
+                alert("'" + this.books[i].title + "' is not available." );
+                return null;
+             }
+          }
+      }
     }
-  }
-
-  var lib = new Library();
-  console.log('New library:', lib);
-
-  lib.addBook({
-    title: 'Test Title 1',
-    author: 'Author 1'
-  });
-  console.log('# of books should be 1:', lib.books.length);
-
-  lib.addBook({
-    title: 'Test Title 2',
-    author: 'Author 2'
-  });
-  console.log('# of books should be 2:', lib.books.length);
-
-  var book = lib.getBook('Test Title 1');
-  console.log('The book should exist:', book);
-  console.log('Book status should be available:', book.status);
-
-  // This should render all the library's books to the web page
-  lib.render();
+  };
 
   $('#add-book-form').submit(function(event) {
     event.preventDefault();
@@ -113,43 +105,39 @@
     $('#add-book-form')[0].reset();
   });
 
-  // var Library = function(color) {
-  //   this.color = color;
-  // }
+  // =========== START PROCEDUREAL TEST CODE ===========
 
-  // var books = [
-  //   {
-  //     title: 'Moby Dick',
-  //     author: 'Herman Melville',
-  //     status: 'available'
-  //   },
-  //   {
-  //     title: 'The Republic',
-  //     author: 'Plato',
-  //     status: 'available'
-  //   },
-  //   {
-  //     title: 'Metaphysics',
-  //     author: 'Aristotle',
-  //     status: 'available'
-  //   }
-  // ];
+  var lib = new Library();
+  console.log('New library:', lib);
 
-  // var renderLibrary = function(books) {
-  //     $('#library').html('');
-  //     var bookTemplateHtml = $('#templates .book').html();
-  //     var scoreTemplate = _.template(bookTemplateHtml);
-  //     var newBookHtml;
+  lib.addBook({
+    title: 'Moby Dick',
+    author: 'Herman Melville'
+  });
+  console.log('# of books should be 1:', lib.books.length);
 
-  //     for (var i = 0; i < books.length; i++) {
-  //         newBookHtml = scoreTemplate(books[i]);
-  //         $('#library').append(newBookHtml);
-  //     }
-  // }
+  lib.addBook({
+    title: 'The Republic',
+    author: 'Plato'
+  });
 
+  lib.addBook({
+    title: 'Metaphysics',
+    author: 'Aristotle'
+  });
+  console.log('# of books should be 3:', lib.books.length);
 
-  
-  // renderLibrary(books);
+  var book = lib.getBook('Moby Dick');
+  console.log('The book should exist:', book);
+  console.log('Book status should be available:', book.status);
+
+  // This should render all the library's books to the web page
+  lib.render();
+
+  lib.checkoutBook('Moby Dick');
+
+  lib.render();
+
 
 </script>
 
