@@ -50,35 +50,54 @@
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.4/underscore-min.js"></script>
 <script type="text/javascript">
-  var books = [
-    {
-      title: 'Moby Dick',
-      author: 'Herman Melville',
-      status: 'available'
+  var Library = function(name) {
+    this.name = name,
+    this.books = [],
+    this.addBook = function(bookObject) {
+        bookObject.status = "available";
+        this.books.push(bookObject);
     },
-    {
-      title: 'The Republic',
-      author: 'Plato',
-      status: 'available'
-    },
-    {
-      title: 'Metaphysics',
-      author: 'Aristotle',
-      status: 'available'
-    }
-  ];
-
-  var renderLibrary = function(books) {
-      $('#library').html('');
-      var bookTemplateHtml = $('#templates .book').html();
-      var scoreTemplate = _.template(bookTemplateHtml);
-      var newBookHtml;
-
-      for (var i = 0; i < books.length; i++) {
-          newBookHtml = scoreTemplate(books[i]);
-          $('#library').append(newBookHtml);
+    this.getBook = function(bookTitle) {
+      for (var i = 0; i <= this.books.length; i++) {
+          if (this.books[i].title === bookTitle) {
+             return this.books[i];
+          }
       }
+    }
+    this.render = function() {
+        $('#library').html('');
+        var bookTemplateHtml = $('#templates .book').html();
+        var scoreTemplate = _.template(bookTemplateHtml);
+        var newBookHtml;
+
+        for (var i = 0; i < this.books.length; i++) {
+            newBookHtml = scoreTemplate(this.books[i]);
+            $('#library').append(newBookHtml);
+        }
+    }
   }
+
+  var lib = new Library();
+  console.log('New library:', lib);
+
+  lib.addBook({
+    title: 'Test Title 1',
+    author: 'Author 1'
+  });
+  console.log('# of books should be 1:', lib.books.length);
+
+  lib.addBook({
+    title: 'Test Title 2',
+    author: 'Author 2'
+  });
+  console.log('# of books should be 2:', lib.books.length);
+
+  var book = lib.getBook('Test Title 1');
+  console.log('The book should exist:', book);
+  console.log('Book status should be available:', book.status);
+
+  // This should render all the library's books to the web page
+  lib.render();
 
   $('#add-book-form').submit(function(event) {
     event.preventDefault();
@@ -89,12 +108,48 @@
         author: newBookAuthor, 
         status: 'available'
     };
-    books.push(newBookHash);
-    renderLibrary(books);
+    lib.books.push(newBookHash);
+    lib.render();
     $('#add-book-form')[0].reset();
   });
+
+  // var Library = function(color) {
+  //   this.color = color;
+  // }
+
+  // var books = [
+  //   {
+  //     title: 'Moby Dick',
+  //     author: 'Herman Melville',
+  //     status: 'available'
+  //   },
+  //   {
+  //     title: 'The Republic',
+  //     author: 'Plato',
+  //     status: 'available'
+  //   },
+  //   {
+  //     title: 'Metaphysics',
+  //     author: 'Aristotle',
+  //     status: 'available'
+  //   }
+  // ];
+
+  // var renderLibrary = function(books) {
+  //     $('#library').html('');
+  //     var bookTemplateHtml = $('#templates .book').html();
+  //     var scoreTemplate = _.template(bookTemplateHtml);
+  //     var newBookHtml;
+
+  //     for (var i = 0; i < books.length; i++) {
+  //         newBookHtml = scoreTemplate(books[i]);
+  //         $('#library').append(newBookHtml);
+  //     }
+  // }
+
+
   
-  renderLibrary(books);
+  // renderLibrary(books);
 
 </script>
 
