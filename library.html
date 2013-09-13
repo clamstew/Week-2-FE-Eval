@@ -43,6 +43,11 @@
       <h3><%= title %></h3>
       <h5><%= author %></h3>
       <p>Status: <%= status %></p>
+      <% if(status === 'available') { %>
+          <input class="checkout-book" data-title="<%= title %>" type="button" value="Check Out"/>
+      <% } else if(status === 'checkedOut') { %>
+          <input class="checkout-book" data-title="<%= title %>" type="button" disabled="disabled" value="Not available"/>
+      <% } %>
     </div>
   </script>
 </div>
@@ -74,6 +79,8 @@
             newBookHtml = scoreTemplate(this.books[i]);
             $('#library').append(newBookHtml);
         }
+        console.log(this);
+        checkoutBookButtion(this); // reinitialize this click function after a new load
     },
     this.checkoutBook = function(bookTitle) {
       for (var i = 0; i <= this.books.length; i++) {
@@ -91,6 +98,8 @@
     }
   };
 
+
+
   $('#add-book-form').submit(function(event) {
     event.preventDefault();
     var newBookTitle = $('#add-book-form #title').val();
@@ -103,11 +112,24 @@
     lib.books.push(newBookHash);
     lib.render();
     $('#add-book-form')[0].reset();
+    checkoutBookButtion(lib); // reinitialize this click function after a new load
   });
 
+  var checkoutBookButtion = function() {
+    $('.checkout-book').unbind('click');
+    $('.checkout-book').bind('click', function(event) {
+      event.preventDefault();
+      var thisBookTitle = $(this).data('title');
+
+      var thisbook = lib.getBook(thisBookTitle);
+      thisbook.status = "checkedOut";
+      lib.render();
+    });
+  }
+  
   // =========== START PROCEDUREAL TEST CODE ===========
 
-  var lib = new Library();
+  var lib = new Library('East Austin Library');
   console.log('New library:', lib);
 
   lib.addBook({
@@ -138,6 +160,7 @@
 
   lib.render();
 
+  // =========== END PROCEDUREAL TEST CODE ===========
 
 </script>
 
